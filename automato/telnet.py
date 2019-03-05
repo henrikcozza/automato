@@ -62,16 +62,20 @@ class IOS:
             host = host.split()
             if host:
                 try:
-                    tn = telnetlib.Telnet(host)
+                    if self.get_user():
+                        tn = telnetlib.Telnet(host)
+                        self.login(tn)
 
-                    for conf in config:
-                        tn.write(conf)
-                        # finaliza configuração
-                        tn.write(b'end\n')
-                        # desconecta telnet deste host
-                        tn.write(b'exit\n')
+                        for conf in config:
+                            tn.write(conf)
+                            # finaliza configuração
+                            tn.write(b'end\n')
+                            # desconecta telnet deste host
+                            tn.write(b'exit\n')
 
-                        assert tn.read_all(), "Algo deu errado."
+                            assert tn.read_all(), "Algo deu errado."
+                    else:
+                        print('Erro: Usuário não foi definido')
 
                 except Exception as e:
                     print ('Erro ao tentar conectar'
