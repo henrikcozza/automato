@@ -27,7 +27,5 @@ setup(
     # long_description=open("README.txt").read(),
 
     # Dependent packages (distributions)
-    install_requires=[
-        "telnetlib",
-    ],
+    install_requires=[],
 )
