@@ -59,7 +59,6 @@ class IOS:
         """Executa comandos que existem no contexto"""
         config = self.getConfig()
         for host in self.hosts:
-            host = host.split()
             if host:
                 try:
                     if self.get_user():
