@@ -2,17 +2,17 @@ from distutils.core import setup
 
 setup(
     # Application name:
-    name="Automato",
+    name="automato",
 
     # Version number (initial):
-    version="0.0.1",
+    version="0.0.2",
 
     # Application author details:
     author="Henrique A Conzatti",
     author_email="henrique@conza.com.br",
 
     # Packages
-    packages=["app"],
+    packages=["automato"],
 
     # Include additional files into the package
     include_package_data=True,
