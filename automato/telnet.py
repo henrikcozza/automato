@@ -28,20 +28,36 @@ class IOS:
     def get_user(self):
         return self.__user
 
-    def login(self, telnet_obj):
+    def login(self, host):
         user = self.get_user()
+        tn = None
+
         if user:
+            print('user ok')
             try:
-                telnet_obj.read_until(b"Username: ")
-                telnet_obj.write(user['name'].encode('ascii') + b"\n")
+                print("Configurando Switch %s" % (host))
+
+                try:
+                    tn = telnetlib.Telnet(host)
+                except Exception as e:
+                    print (host)
+                    print('host - %s : erro - %s'%(host,e))
+
+                tn.read_until(b"Username: ")
+                tn.write(user['name'].encode('ascii') + b"\n")
                 if user['password']:
-                    telnet_obj.read_until(b"Password: ")
-                    telnet_obj.write(user['password'].encode('ascii') + b"\n")
+                    print('here')
+                    tn.read_until(b"Password: ",10)
+                    tn.write(user['password'].encode('ascii') + b"\n")
                 else:
                     print('Password não pode ter valor nulo')
             except Exception as e:
                 print('Falha ao tentar logar com usuario %s'
                       '\n Erro %s' % (user['name'], e))
+        else:
+            print('user not ok')
+
+        return tn
 
     def addConfig(self, configLine):
         """Incrementa configurações da instancia para serem
@@ -58,26 +74,20 @@ class IOS:
     def configure(self):
         """Executa comandos que existem no contexto"""
         config = self.getConfig()
+        config += [b'end\n',b'exit\n']
         for host in self.hosts:
             if host:
                 try:
                     if self.get_user():
-                        tn = telnetlib.Telnet(host)
-                        self.login(tn)
-
+                        tn = self.login(host)
                         for conf in config:
                             tn.write(conf)
-                            # finaliza configuração
-                            tn.write(b'end\n')
-                            # desconecta telnet deste host
-                            tn.write(b'exit\n')
-
-                            assert tn.read_all(), "Algo deu errado."
+                        print(tn.read_all().decode('ascii'))
                     else:
                         print('Erro: Usuário não foi definido')
 
                 except Exception as e:
                     print ('Erro ao tentar conectar'
-                           ' no Host %s\n %s' % (host[0], e))
-
+                           ' no Host %s\n %s' % (host, e))
+                print('host %s configurado' % host)
                 return 0
