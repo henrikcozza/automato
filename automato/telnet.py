@@ -90,4 +90,4 @@ class IOS:
                     print ('Erro ao tentar conectar'
                            ' no Host %s\n %s' % (host, e))
                 print('host %s configurado' % host)
-                return 0
+        return 0
