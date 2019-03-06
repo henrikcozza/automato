@@ -11,7 +11,6 @@ class IOS:
                     "arquivo\ncontendo todos os hosts utilizados na " + \
                     "configuração."
             self.hosts = [host]
-            import pdb; pdb.set_trace()
         else:
             with open(fileHosts) as file:
                 self.hosts = file.read().splitlines()
@@ -73,7 +72,7 @@ class IOS:
         with open(file) as f:
             # concatena os 3 primeiros elementos da configuração definidos no
             # com as configurações carregasdas do arquivo.
-            self.__config = self.__config[:3] + f.read().splitlines()
+            self.__config = self.__config[:3] + [x.encode('ascii') for x in f.read().splitlines()]
 
     def getConfig(self):
         """Retorna lista de configureções"""
