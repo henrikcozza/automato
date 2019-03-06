@@ -16,7 +16,7 @@ class IOS:
             with open(fileHosts) as file:
                 self.hosts = file.read().splitlines()
 
-        self.__config = [b'enable\n', pass_enable.encode('ascii')+'\n', b'conf t\n']
+        self.__config = [b'enable\n', pass_enable.encode('ascii')+b'\n', b'conf t\n']
 
     def set_user(self, user, password):
         """Define variaveis de usuario"""
