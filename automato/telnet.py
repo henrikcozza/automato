@@ -67,6 +67,14 @@ class IOS:
                 configLine += b'\n'
             self.__config.append(configLine)
 
+    def loadConfigFile(self, file):
+        """Carrega configurações aplicadas nos dispositivos atraves
+            de um arquivo de texto simples"""
+        with open(file) as f:
+            # concatena os 3 primeiros elementos da configuração definidos no
+            # com as configurações carregasdas do arquivo.
+            self.__config = self.__config[:3] + f.read().splitlines()
+
     def getConfig(self):
         """Retorna lista de configureções"""
         return self.__config
