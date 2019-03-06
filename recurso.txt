@@ -1,1 +1,0 @@
-Esse recurso permite carregar as configurações aplicadas nops devices apartir de um arquivo de texto simples.
