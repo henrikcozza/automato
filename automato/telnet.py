@@ -3,7 +3,7 @@ import telnetlib
 
 
 class IOS:
-    def __init__(self, fileHosts=None, host=None):
+    def __init__(self, fileHosts=None, host=None, pass_enable=''):
         """Incializa construtor armazenando hosts que seram
         configurados"""
         if not fileHosts:
@@ -11,12 +11,12 @@ class IOS:
                     "arquivo\ncontendo todos os hosts utilizados na " + \
                     "configuração."
             self.hosts = [host]
-
+            import pdb; pdb.set_trace()
         else:
             with open(fileHosts) as file:
                 self.hosts = file.read().splitlines()
 
-        self.__config = [b'enable\n', b'conf t\n']
+        self.__config = [b'enable\n', pass_enable.encode('ascii')+'\n', b'conf t\n']
 
     def set_user(self, user, password):
         """Define variaveis de usuario"""
@@ -33,38 +33,38 @@ class IOS:
         tn = None
 
         if user:
-            print('user ok')
             try:
                 print("Configurando Switch %s" % (host))
 
                 try:
                     tn = telnetlib.Telnet(host)
                 except Exception as e:
-                    print (host)
                     print('host - %s : erro - %s'%(host,e))
 
                 tn.read_until(b"Username: ")
                 tn.write(user['name'].encode('ascii') + b"\n")
                 if user['password']:
-                    print('here')
-                    tn.read_until(b"Password: ",10)
+                    tn.read_until(b"Password: ")
                     tn.write(user['password'].encode('ascii') + b"\n")
                 else:
                     print('Password não pode ter valor nulo')
             except Exception as e:
                 print('Falha ao tentar logar com usuario %s'
                       '\n Erro %s' % (user['name'], e))
-        else:
-            print('user not ok')
 
         return tn
 
     def addConfig(self, configLine):
         """Incrementa configurações da instancia para serem
          executadas nos hosts"""
+
         if not isinstance(configLine, bytes):
+            if '\n' not in configLine:
+                configLine += '\n'
             self.__config.append(bytes(configLine))
         else:
+            if b'\n' not in configLine:
+                configLine += b'\n'
             self.__config.append(configLine)
 
     def getConfig(self):
@@ -74,7 +74,7 @@ class IOS:
     def configure(self):
         """Executa comandos que existem no contexto"""
         config = self.getConfig()
-        config += [b'end\n',b'exit\n']
+        config += [b'end\n', b'exit\n']
         for host in self.hosts:
             if host:
                 try:
