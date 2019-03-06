@@ -61,7 +61,7 @@ class IOS:
         if not isinstance(configLine, bytes):
             if '\n' not in configLine:
                 configLine += '\n'
-            self.__config.append(bytes(configLine))
+            self.__config.append(bytes(configLine, 'utf-8'))
         else:
             if b'\n' not in configLine:
                 configLine += b'\n'
