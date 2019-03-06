@@ -1,5 +1,5 @@
 # Automato
-Library para automação de rede
+Biblioteca para automação de rede
 
 ## exemplo de uso
 ```python
