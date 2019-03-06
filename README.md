@@ -1,6 +1,6 @@
-# automato
-library para automação de rede
-Det
+# Automato
+Library para automação de rede
+
 ## exemplo de uso
 ```python
 from automato.telnet import IOS
